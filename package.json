@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:data": "node scripts/build-verse-data.mjs",
+    "generate:data:from-transcript": "node scripts/build-generatedVerseData-from-cursor-transcript.mjs"
   },
   "dependencies": {
     "next": "16.1.7",

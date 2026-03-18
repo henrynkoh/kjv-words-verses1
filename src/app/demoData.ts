@@ -19,11 +19,14 @@ export type Chip = {
   chipBg: string; // CSS color for background
 };
 
-export const KJV_WORDS_REPO_URL = "https://github.com/henryroh/kjv-words-verses1";
+export const KJV_WORDS_REPO_URL = "https://github.com/henrynkoh/kjv-words-verses1";
 
-// Placeholder content so the UI works end-to-end.
-// Once you provide the full transcript dataset, the importer/validator will generate the real topics/verses.
-export const TOPICS: Topic[] = [
+// Generated dataset:
+// - `scripts/build-verse-data.mjs` parses your Section blocks and writes `generatedVerseData.ts`
+// - we keep a small fallback so the UI still renders even before generation happens.
+import { TOPICS as GENERATED_TOPICS, CHIPS as GENERATED_CHIPS } from "./generatedVerseData";
+
+const FALLBACK_TOPICS: Topic[] = [
   {
     id: "christ-end-of-law",
     title: "Christ end of law",
@@ -32,8 +35,7 @@ export const TOPICS: Topic[] = [
       {
         ref: "Romans 10:4",
         kjv: "For Christ is the end of the law for righteousness to every one that believeth.",
-        korean:
-          "그리스도는 믿는 모든 사람에게 의를 위하여 율법의 끝이시니라.",
+        korean: "그리스도는 믿는 모든 사람에게 의를 위하여 율법의 끝이시니라.",
       },
     ],
   },
@@ -50,23 +52,9 @@ export const TOPICS: Topic[] = [
       },
     ],
   },
-  {
-    id: "all-scripture-inspired",
-    title: "all scripture inspired",
-    subtitle: "God-breathed instruction for believers.",
-    verses: [
-      {
-        ref: "2 Timothy 3:16-17",
-        kjv: "All scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness:",
-        korean:
-          "모든 성경은 하나님의 감동으로 된 것으로 교훈과 책망과 바르게 함과 의로 교육하기에 유익하니",
-      },
-    ],
-  },
 ];
 
-export const CHIPS: Chip[] = [
-  // Topic 1
+const FALLBACK_CHIPS: Chip[] = [
   {
     id: "chip-christ-end-of-law",
     label: "Christ end of law",
@@ -74,7 +62,6 @@ export const CHIPS: Chip[] = [
     chipColor: "#a78bfa",
     chipBg: "rgba(167, 139, 250, 0.10)",
   },
-  // Topic 2
   {
     id: "chip-pauls-gospel",
     label: "Paul's gospel",
@@ -82,15 +69,13 @@ export const CHIPS: Chip[] = [
     chipColor: "#fbbf24",
     chipBg: "rgba(251, 191, 36, 0.12)",
   },
-  // Topic 3
-  {
-    id: "chip-all-scripture-inspired",
-    label: "all scripture inspired",
-    topicId: "all-scripture-inspired",
-    chipColor: "#2dd4bf",
-    chipBg: "rgba(45, 212, 191, 0.10)",
-  },
 ];
+
+export const TOPICS: Topic[] =
+  (GENERATED_TOPICS as Topic[]).length > 0 ? (GENERATED_TOPICS as Topic[]) : FALLBACK_TOPICS;
+
+export const CHIPS: Chip[] =
+  (GENERATED_CHIPS as Chip[]).length > 0 ? (GENERATED_CHIPS as Chip[]) : FALLBACK_CHIPS;
 
 export type ComparisonPair = {
   lawTitle: string;
