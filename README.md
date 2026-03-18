@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KJV Words - Verses
 
-## Getting Started
+<table>
+  <tr>
+    <td width="320" valign="top">
+      <h3>On this page</h3>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#what-you-can-do">What you can do</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#verse-integrity">Verse integrity</a></li>
+        <li><a href="#docs">Docs</a></li>
+        <li><a href="#ads">Ad copy</a></li>
+        <li><a href="#get-started">Get started</a></li>
+      </ul>
+    </td>
+    <td valign="top">
+      <a name="overview"></a>
+      <h2>Overview</h2>
+      <p>
+        A Next.js rebuild of <code>kjv-words-milk4512</code> that presents KJV Bible verses organized by topic/category,
+        paired with Korean translations (<code>흠정역 한글성경전서</code>), with strong deduplication and validation to avoid
+        redundancy or omissions.
+      </p>
 
-First, run the development server:
+      <a name="what-you-can-do"></a>
+      <h2>What you can do</h2>
+      <ul>
+        <li>Explore topics/categories and browse verse lists</li>
+        <li>Open a verse-by-topic page (<code>/topics/[topicId]</code>)</li>
+        <li>Search and navigate verses</li>
+        <li>“Generate verse” (planned)</li>
+        <li>Compare themes (example: law vs Paul’s gospel) via <code>/compare</code> (planned)</li>
+      </ul>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+      <a name="features"></a>
+      <h2>Features</h2>
+      <ul>
+        <li>Topic-based browsing with fast navigation</li>
+        <li>KJV + 흠정역 pairing at verse detail</li>
+        <li>Importer + validators to prevent missing pairs and duplicates</li>
+        <li>Modern landing experience is implemented on the web route (<code>/</code>)</li>
+      </ul>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+      <a name="how-it-works"></a>
+      <h2>How it works</h2>
+      <ol>
+        <li>Import categorized transcripts into structured records</li>
+        <li>Normalize KJV references for reliable deduplication</li>
+        <li>Validate integrity (uniqueness + topic mapping + missing pair detection)</li>
+        <li>Render topic pages and verse detail views for browsing</li>
+      </ol>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+      <a name="verse-integrity"></a>
+      <h2>Verse integrity</h2>
+      <ul>
+        <li><b>Unique per KJV reference:</b> each canonical reference appears once globally</li>
+        <li><b>Correct topic mapping:</b> topic pages include the exact set derived from input sections</li>
+        <li><b>Missing pair detection:</b> flags if KJV exists without 흠정역 (or vice-versa)</li>
+      </ul>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+      <a name="docs"></a>
+      <h2>Docs</h2>
+      <ul>
+        <li><code>docs/quickstarter.md</code></li>
+        <li><code>docs/tutorial.md</code></li>
+        <li><code>docs/manual.md</code></li>
+        <li><code>docs/ads.md</code> (platform ad copy pack)</li>
+      </ul>
 
-## Learn More
+      <a name="ads"></a>
+      <h2>Ad copy</h2>
+      <p>
+        Platform-specific drafts are ready in <code>docs/ads.md</code> for:
+        Facebook, Instagram, Threads, Blogger, Naver Blog, Tistory, WordPress, Newsletter, and Email.
+      </p>
 
-To learn more about Next.js, take a look at the following resources:
+      <a name="get-started"></a>
+      <h2>Get started</h2>
+      <p>
+        The web landing page with the sticky left navigation + modern visuals is implemented in
+        <code>src/app/page.tsx</code>. To run the project locally:
+      </p>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+      <pre><code>npm install</code></pre>
+      <pre><code>npm run dev</code></pre>
+      <p>Then open <code>http://localhost:3000</code>.</p>
+    </td>
+  </tr>
+</table>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project status
 
-## Deploy on Vercel
+This repository currently contains the Next.js scaffold plus the new landing page UI. Next, the UI pages and the verse/topic importer pipeline will be added incrementally following the plan in <code>tasks/todo.md</code>.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
