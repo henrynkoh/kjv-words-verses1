@@ -23,6 +23,7 @@
 - [x] Documentation: update `README.md`, add `docs/manual.md`, `docs/tutorial.md`, `docs/quickstarter.md`
 - [x] Ads pack: add `docs/ads.md` with copy for Facebook, Instagram, Threads, Blogger, Naver Blog, Tistory, WordPress, Newsletter, and Email
 - [x] Landing page: interactive `/` with sticky left navigation + section scrolling + floating GitHub link
+- [x] App UI routes: `/verse`, `/compare`, `/verses` with interactive cards + chip grid (placeholder data)
 
 ## Review
 Docs added:
@@ -34,4 +35,10 @@ Pending: need you to provide the transcript text as files (or confirm that we sh
 
 Review update:
 - Landing page implemented on `/` (sticky section nav + smooth scrolling + floating GitHub button)
+
+Push status:
+- [x] Pushed `main` to `kjv-words-verses1` via SSH
+
+Local update (not pushed yet):
+- Home now redirects to `/verse` (app-first UI instead of landing page)
 
