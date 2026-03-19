@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import styles from "../kjvApp.module.css";
 import type { Topic } from "../demoData";
-import { KJV_WORDS_REPO_URL } from "../demoData";
+import { CHIPS, KJV_WORDS_REPO_URL } from "../demoData";
 
 type Props = {
   children: ReactNode;
@@ -81,23 +81,41 @@ export default function KjvAppShell({
         <aside className={styles.sidebar} aria-label="Topics sidebar">
           <div className={styles.sidebarTitle}>Topics</div>
           <div className={styles.topicList}>
-            {topics.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className={[
-                  styles.topicButton,
-                  t.id === selectedTopicId ? styles.topicButtonActive : "",
-                ].join(" ")}
-                onClick={() => onSelectTopic(t.id)}
-              >
-                <div className={styles.topicButtonTop}>
-                  <div className={styles.topicButtonName}>{t.title}</div>
-                  <div className={styles.topicButtonCount}>{t.verses.length} verse</div>
-                </div>
-                {t.subtitle ? <div className={styles.topicButtonSub}>{t.subtitle}</div> : null}
-              </button>
-            ))}
+            {topics.map((t) => {
+              const chip = CHIPS.find((c) => c.topicId === t.id);
+              const topicButtonStyle: (CSSProperties &
+                Record<string, string>) | undefined = chip
+                ? {
+                    borderColor: chip.chipColor,
+                    background: `linear-gradient(135deg, ${chip.chipBg} 0%, rgba(255,255,255,0.03) 100%)`,
+                    ["--topic-accent"]: chip.chipColor,
+                    ["--topic-accent-bg"]: chip.chipBg,
+                  }
+                : undefined;
+
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={[
+                    styles.topicButton,
+                    t.id === selectedTopicId ? styles.topicButtonActive : "",
+                  ].join(" ")}
+                  onClick={() => onSelectTopic(t.id)}
+                  style={topicButtonStyle}
+                >
+                  <div className={styles.topicButtonTop}>
+                    <div className={styles.topicButtonName}>{t.title}</div>
+                    <div className={styles.topicButtonCount}>
+                      {t.verses.length} verse
+                    </div>
+                  </div>
+                  {t.subtitle ? (
+                    <div className={styles.topicButtonSub}>{t.subtitle}</div>
+                  ) : null}
+                </button>
+              );
+            })}
           </div>
         </aside>
 
