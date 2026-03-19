@@ -6,6 +6,7 @@ import styles from "../kjvApp.module.css";
 import { TOPICS, type Verse } from "../demoData";
 
 type VerseWithTopic = Verse & { topicTitle: string };
+type VersePair = { law: VerseWithTopic; pauls: VerseWithTopic };
 
 function uniqByRef<T extends { ref: string }>(arr: T[]): T[] {
   const seen = new Set<string>();
@@ -35,6 +36,7 @@ function scoreText(text: string, keywords: string[]): number {
 export default function ComparePage() {
   const [selectedTopicId, setSelectedTopicId] = useState(TOPICS[0]?.id ?? "");
   const [expanded, setExpanded] = useState(false);
+  const [pairs, setPairs] = useState<VersePair[]>([]);
 
   const { lawPool, paulsPool } = useMemo(() => {
     const all: VerseWithTopic[] = TOPICS.flatMap((t) =>
@@ -98,12 +100,11 @@ export default function ComparePage() {
     };
   }, []);
 
-  const [lawVerses, setLawVerses] = useState<VerseWithTopic[]>(() =>
-    lawPool[0] ? [lawPool[0]] : [],
-  );
-  const [paulsVerses, setPaulsVerses] = useState<VerseWithTopic[]>(() =>
-    paulsPool[0] ? [paulsPool[0]] : [],
-  );
+  const initialPairs = useMemo(() => {
+    const law = lawPool[0];
+    const pauls = paulsPool[0];
+    return law && pauls ? [{ law, pauls }] : [];
+  }, [lawPool, paulsPool]);
 
   function pickExpandedVerses(pool: VerseWithTopic[], count: number) {
     if (pool.length <= count) return pool.slice(0, count);
@@ -112,19 +113,28 @@ export default function ComparePage() {
     return shuffled.slice(0, count);
   }
 
+  function zipPairs(law: VerseWithTopic[], pauls: VerseWithTopic[], count: number): VersePair[] {
+    const n = Math.min(count, law.length, pauls.length);
+    const out: VersePair[] = [];
+    for (let i = 0; i < n; i++) out.push({ law: law[i], pauls: pauls[i] });
+    return out;
+  }
+
   function onGenerateComparison() {
     // Always refresh content; expanded shows ~30x more verses.
     if (!lawPool.length || !paulsPool.length) return;
 
     if (!expanded) {
       setExpanded(true);
-      setLawVerses(pickExpandedVerses(lawPool, 30));
-      setPaulsVerses(pickExpandedVerses(paulsPool, 30));
+      const law = pickExpandedVerses(lawPool, 30);
+      const pauls = pickExpandedVerses(paulsPool, 30);
+      setPairs(zipPairs(law, pauls, 30));
       return;
     }
 
-    setLawVerses(pickExpandedVerses(lawPool, 30));
-    setPaulsVerses(pickExpandedVerses(paulsPool, 30));
+    const law = pickExpandedVerses(lawPool, 30);
+    const pauls = pickExpandedVerses(paulsPool, 30);
+    setPairs(zipPairs(law, pauls, 30));
   }
 
   return (
@@ -143,44 +153,49 @@ export default function ComparePage() {
       <section className={styles.compareCard} aria-label="Law vs Paul's gospel comparison">
         <div className={styles.compareHeader}>Law vs Paul&apos;s Gospel</div>
         <div className={styles.tableWrap}>
-          <div className={styles.compareGrid}>
-            <div>
-              <div className={styles.compareRef}>Law</div>
-
-              <div className={styles.compareSideLabel}>
-                Showing {lawVerses.length} verse(s){expanded ? " (expanded)" : ""}
-              </div>
-
-              <div className={styles.compareScroll}>
-                {lawVerses.map((v) => (
-                  <div key={v.ref} className={styles.compareItem}>
-                    <div className={styles.verseRef}>{v.ref}</div>
-                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>{v.kjv}</div>
-                    <div className={styles.compareKoreanLabel}>흠정역 한글성경전서</div>
-                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>{v.korean}</div>
+          <div className={styles.comparePairs}>
+            {(expanded ? pairs : initialPairs).map((p, idx) => (
+              <section key={`${p.law.ref}__${p.pauls.ref}`} className={styles.comparePairBox}>
+                <div className={styles.comparePairHeader}>
+                  <div className={styles.comparePairIndex}>#{idx + 1}</div>
+                  <div className={styles.comparePairTitle}>
+                    Law vs Paul&apos;s Gospel
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            <div>
-              <div className={styles.compareRef}>Paul&apos;s Gospel</div>
-
-              <div className={styles.compareSideLabel}>
-                Showing {paulsVerses.length} verse(s){expanded ? " (expanded)" : ""}
-              </div>
-
-              <div className={styles.compareScroll}>
-                {paulsVerses.map((v) => (
-                  <div key={v.ref} className={styles.compareItem}>
-                    <div className={styles.verseRef}>{v.ref}</div>
-                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>{v.kjv}</div>
+                <div className={styles.compareGrid}>
+                  <div className={styles.compareSide}>
+                    <div className={styles.compareRef}>Law</div>
+                    <div className={styles.compareMeta}>
+                      Section: <span>{p.law.topicTitle}</span>
+                    </div>
+                    <div className={styles.verseRef}>{p.law.ref}</div>
+                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>
+                      {p.law.kjv}
+                    </div>
                     <div className={styles.compareKoreanLabel}>흠정역 한글성경전서</div>
-                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>{v.korean}</div>
+                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>
+                      {p.law.korean}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
+
+                  <div className={styles.compareSide}>
+                    <div className={styles.compareRef}>Paul&apos;s Gospel</div>
+                    <div className={styles.compareMeta}>
+                      Section: <span>{p.pauls.topicTitle}</span>
+                    </div>
+                    <div className={styles.verseRef}>{p.pauls.ref}</div>
+                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>
+                      {p.pauls.kjv}
+                    </div>
+                    <div className={styles.compareKoreanLabel}>흠정역 한글성경전서</div>
+                    <div className={[styles.verseText, styles.verseTextMuted].join(" ")}>
+                      {p.pauls.korean}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            ))}
           </div>
 
           <div style={{ marginTop: 18, paddingLeft: 2, display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -200,8 +215,7 @@ export default function ComparePage() {
                   if (!lawPool.length || !paulsPool.length) return;
                   const law = randomFrom(lawPool);
                   const pauls = randomFrom(paulsPool);
-                  setLawVerses([law]);
-                  setPaulsVerses([pauls]);
+                  setPairs([{ law, pauls }]);
                 }}
               >
                 Randomize (collapsed)

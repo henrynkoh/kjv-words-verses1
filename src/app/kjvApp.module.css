@@ -428,6 +428,66 @@
   gap: 16px;
 }
 
+.comparePairs {
+  display: grid;
+  gap: 14px;
+}
+
+.comparePairBox {
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: radial-gradient(900px 240px at 10% 0%, rgba(99, 102, 241, 0.12), transparent 55%),
+    radial-gradient(800px 260px at 90% 0%, rgba(45, 212, 191, 0.12), transparent 55%),
+    rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.35);
+}
+
+.comparePairHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+}
+
+.comparePairIndex {
+  font-weight: 980;
+  letter-spacing: -0.4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.92);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.comparePairTitle {
+  font-weight: 950;
+  letter-spacing: -0.4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.compareSide {
+  padding: 12px 14px 14px;
+}
+
+.compareMeta {
+  margin-top: -2px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.60);
+  font-weight: 900;
+}
+
+.compareMeta span {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 950;
+}
+
 .compareHeader {
   padding: 12px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
